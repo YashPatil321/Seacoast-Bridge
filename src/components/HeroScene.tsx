@@ -17,7 +17,7 @@ export function HeroScene() {
       <svg
         viewBox="0 0 1440 640"
         preserveAspectRatio="xMaxYMid slice"
-        className="absolute inset-0 h-full w-full opacity-30 sm:opacity-60 lg:opacity-100"
+        className="absolute inset-0 hidden h-full w-full sm:block sm:opacity-60 lg:opacity-100"
       >
         <defs>
           <radialGradient id="sky-glow" cx="0.86" cy="0.46" r="0.5">
@@ -62,7 +62,7 @@ export function HeroScene() {
       </svg>
 
       {/* swell */}
-      <div className="absolute inset-x-0 bottom-0 h-[110px] overflow-hidden">
+      <div className="absolute inset-x-0 bottom-0 h-[64px] overflow-hidden sm:h-[110px]">
         <svg viewBox="0 0 2880 120" preserveAspectRatio="none" className="wave absolute bottom-0 left-0 h-full w-[200%]" style={{ animationDuration: "38s" }}>
           <path d={swell(7, 240, 40)} fill="#0c3334" />
         </svg>

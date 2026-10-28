@@ -13,7 +13,7 @@ export default function SupportPage() {
   return (
     <>
       <div className="bg-teal text-white">
-        <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-16">
+        <div className="mx-auto max-w-6xl px-5 py-14 sm:px-6 sm:py-16">
           <p className="label text-seaglass">Seacoast Bridge · Support</p>
           <h1 className="rise mt-4 max-w-2xl text-4xl font-semibold sm:text-5xl">Add your support</h1>
           <p className="rise mt-4 max-w-xl text-lg text-[#d6ebe7]" style={{ ["--rise-delay" as string]: "100ms" }}>
@@ -26,7 +26,7 @@ export default function SupportPage() {
         </div>
       </div>
       <Disclaimer />
-      <div className="mx-auto max-w-3xl px-4 py-14 sm:px-6">
+      <div className="mx-auto max-w-3xl px-5 py-14 sm:px-6">
         <SupportForm />
       </div>
     </>

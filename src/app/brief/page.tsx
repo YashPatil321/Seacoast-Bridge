@@ -37,17 +37,26 @@ function Src({ id, children }: { id: string; children?: React.ReactNode }) {
 
 function H2({ id, n, children }: { id: string; n: string; children: React.ReactNode }) {
   return (
-    <h2 id={id} className="mt-14 flex items-baseline gap-4 border-t border-rule pt-8 text-[1.65rem] font-semibold print:mt-8 print:pt-4 print:text-[15pt]">
+    <h2 id={id} className="mt-10 flex items-baseline gap-3 border-t border-rule pt-6 text-[1.4rem] font-semibold sm:mt-14 sm:gap-4 sm:pt-8 sm:text-[1.65rem] print:mt-8 print:pt-4 print:text-[15pt]">
       <span className="num text-sm font-medium text-accent">{n}</span>
       <span>{children}</span>
     </h2>
   );
 }
 
+/**
+ * Brief table. On phones, rows stack (label above detail) so nothing scrolls sideways;
+ * short two-column number tables (`mono`) stay as tables at every width.
+ */
 function Table({ head, rows, cols, mono }: { head: string[]; rows: React.ReactNode[][]; cols?: string; mono?: boolean }) {
+  const stack = !mono;
   return (
-    <div className="mt-6 overflow-x-auto print:overflow-visible">
-      <table className="w-full min-w-[34rem] border-collapse text-left text-[0.98rem] leading-snug print:min-w-0 print:text-[9.5pt]">
+    <div className="mt-6">
+      <table
+        className={`w-full border-collapse text-left text-[0.98rem] leading-snug print:text-[9.5pt] ${
+          stack ? "max-sm:block max-sm:border-t-2 max-sm:border-ink" : ""
+        }`}
+      >
         {cols && (
           <colgroup>
             {cols.split(" ").map((w, i) => (
@@ -55,7 +64,7 @@ function Table({ head, rows, cols, mono }: { head: string[]; rows: React.ReactNo
             ))}
           </colgroup>
         )}
-        <thead>
+        <thead className={stack ? "max-sm:hidden" : ""}>
           <tr className="border-b-2 border-ink">
             {head.map((h) => (
               <th key={h} scope="col" className="label py-2.5 pr-4 align-bottom font-medium text-muted">
@@ -64,16 +73,23 @@ function Table({ head, rows, cols, mono }: { head: string[]; rows: React.ReactNo
             ))}
           </tr>
         </thead>
-        <tbody>
+        <tbody className={stack ? "max-sm:block" : ""}>
           {rows.map((r, i) => (
-            <tr key={i} className="border-b border-rule align-top">
+            <tr key={i} className={`border-b border-rule align-top ${stack ? "max-sm:block max-sm:py-3.5" : ""}`}>
               {r.map((c, j) =>
                 j === 0 ? (
-                  <th key={j} scope="row" className="py-3 pr-4 font-display font-medium">
+                  <th
+                    key={j}
+                    scope="row"
+                    className={`py-3 pr-4 font-display font-medium ${stack ? "max-sm:block max-sm:p-0 max-sm:text-[1.02rem]" : ""}`}
+                  >
                     {c}
                   </th>
                 ) : (
-                  <td key={j} className={`py-3 pr-4${mono ? " num" : ""}`}>
+                  <td
+                    key={j}
+                    className={`py-3 pr-4${mono ? " num text-right sm:text-left" : ""} ${stack ? "max-sm:block max-sm:p-0 max-sm:pt-1 max-sm:text-muted" : ""}`}
+                  >
                     {c}
                   </td>
                 ),
@@ -90,9 +106,9 @@ export default function BriefPage() {
   return (
     <div className="bg-bg">
       <div className="bg-teal text-white print:bg-white print:text-black">
-        <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16 print:p-0">
+        <div className="mx-auto max-w-6xl px-5 py-10 sm:px-6 sm:py-16 print:p-0">
           <p className="label text-seaglass print:text-black">Policy brief · Imperial Beach, San Diego County · Oct 2026</p>
-          <h1 className="mt-4 max-w-3xl text-4xl font-semibold sm:text-5xl print:text-[24pt]">
+          <h1 className="mt-4 max-w-3xl text-[2rem] font-semibold sm:text-5xl print:text-[24pt]">
             Seacoast Bridge: keeping Imperial Beach small businesses open until the water clears
           </h1>
           <p className="mt-4 font-mono text-sm text-seaglass print:text-black">
@@ -105,28 +121,48 @@ export default function BriefPage() {
       </div>
 
       <div className="border-b border-rule bg-tint print:border print:border-black print:bg-white">
-        <p className="mx-auto max-w-6xl px-4 py-3 font-mono text-[0.78rem] leading-relaxed text-muted sm:px-6 print:px-3 print:text-black">
+        <p className="mx-auto max-w-6xl px-5 py-3 font-mono text-[0.78rem] leading-relaxed text-muted sm:px-6 print:px-3 print:text-black">
           An independent proposal by Yash Patil, a senior at Del Norte High School. Not an official program of the City,
           the County or the Chamber of Commerce. No cards are on sale.
         </p>
       </div>
 
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 pb-24 sm:px-6 lg:grid-cols-[13rem_1fr] print:block print:p-0">
-        <nav aria-label="Brief contents" className="no-print pt-10 lg:sticky lg:top-24 lg:self-start">
-          <p className="label text-accent">Contents</p>
-          <ol className="mt-3 grid grid-cols-1 gap-y-1.5 font-mono text-[0.8rem] sm:grid-cols-2 lg:grid-cols-1">
+      <div className="mx-auto grid max-w-6xl gap-2 px-5 pb-20 sm:px-6 lg:grid-cols-[13rem_1fr] lg:gap-10 print:block print:p-0">
+        <nav aria-label="Brief contents" className="no-print pt-6 lg:sticky lg:top-24 lg:self-start lg:pt-10">
+          <details className="group lg:hidden">
+            <summary className="flex cursor-pointer list-none items-center justify-between py-3 [&::-webkit-details-marker]:hidden">
+              <span className="label text-accent">Contents</span>
+              <span aria-hidden="true" className="font-mono text-lg leading-none text-accent transition-transform group-open:rotate-45">+</span>
+            </summary>
+            <div className="pb-4">
+          <ol className="mt-3 grid grid-cols-1 gap-y-1 font-mono text-[0.82rem] sm:grid-cols-2 lg:grid-cols-1">
             {toc.map(([id, label], i) => (
               <li key={id}>
-                <a href={`#${id}`} className="flex gap-2 text-muted hover:text-ink">
+                <a href={`#${id}`} className="flex gap-2 py-1 text-muted hover:text-ink lg:py-0.5">
                   <span className="num text-accent">{String(i + 1).padStart(2, "0")}</span>
                   {label}
                 </a>
               </li>
             ))}
           </ol>
+            </div>
+          </details>
+          <div className="hidden lg:block">
+            <p className="label text-accent">Contents</p>
+          <ol className="mt-3 grid grid-cols-1 gap-y-1 font-mono text-[0.82rem] sm:grid-cols-2 lg:grid-cols-1">
+            {toc.map(([id, label], i) => (
+              <li key={id}>
+                <a href={`#${id}`} className="flex gap-2 py-1 text-muted hover:text-ink lg:py-0.5">
+                  <span className="num text-accent">{String(i + 1).padStart(2, "0")}</span>
+                  {label}
+                </a>
+              </li>
+            ))}
+          </ol>
+          </div>
         </nav>
 
-        <article className="min-w-0 max-w-[46rem] text-[1.08rem] leading-relaxed print:max-w-none print:text-[10.5pt]">
+        <article className="min-w-0 max-w-[46rem] text-[1.05rem] leading-relaxed sm:text-[1.08rem] print:max-w-none print:text-[10.5pt]">
           <H2 id="summary" n="01">Summary</H2>
           <p className="mt-4">
             The plant that will stop the sewage is funded, and its expansion is

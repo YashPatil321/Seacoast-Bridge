@@ -55,7 +55,7 @@ export function Countdown() {
         <span key={p?.clock} className={p ? "tick inline-block" : "inline-block"} suppressHydrationWarning>
           {p ? p.clock : "--:--:--"}
         </span>{" "}
-        <span className="text-seaglass/60">HRS · MIN · SEC</span>
+        <span className="hidden text-seaglass/60 sm:inline">HRS · MIN · SEC</span>
       </span>
     </span>
   );

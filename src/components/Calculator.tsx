@@ -97,19 +97,31 @@ export function Calculator() {
   };
 
   return (
-    <div className="grid gap-10 lg:grid-cols-[1fr_1.05fr] lg:gap-14">
+    <div className="grid gap-8 lg:grid-cols-[1fr_1.05fr] lg:gap-14">
       <div className="space-y-5">
+        <div
+          aria-hidden="true"
+          className="sticky top-[66px] z-10 -mx-5 flex items-center justify-between gap-4 border-b border-rule bg-bg/95 px-5 py-3 backdrop-blur-sm sm:-mx-6 sm:px-6 lg:hidden"
+        >
+          <span>
+            <span className="label block text-muted">Reserve cost</span>
+            <span className="num text-xl font-semibold text-accent">{usd(tReserve)}</span>
+          </span>
+          <span className="text-right">
+            <span className="label block text-muted">Lending backed</span>
+            <span className="num text-xl font-medium">{usd(tLending)}</span>
+          </span>
+        </div>
         <Slider label="Businesses that borrow" value={count} min={10} max={500} step={10} display={count.toLocaleString("en-US")} onChange={setCount} />
         <Slider label="Average loan" value={loan} min={10_000} max={150_000} step={5_000} display={usd(loan)} onChange={setLoan} />
         <Slider label="Default rate" value={rate} min={0} max={50} step={1} display={`${rate}%`} onChange={setRate} />
         <Slider label="County share of each loss" value={share} min={10} max={100} step={5} display={`${share}%`} onChange={setShare} />
-        <div className="flex items-center justify-between pt-1">
-          <p className="label text-muted">Illustrative assumptions, not county figures</p>
+        <div className="flex justify-end">
           <button
             type="button"
             onClick={reset}
             disabled={isDefault}
-            className="font-mono text-xs text-accent underline underline-offset-4 disabled:cursor-default disabled:no-underline disabled:opacity-40"
+            className="px-1 py-2 font-mono text-xs text-accent underline underline-offset-4 disabled:cursor-default disabled:no-underline disabled:opacity-40"
           >
             Reset
           </button>
@@ -121,16 +133,16 @@ export function Calculator() {
           {`Total lending ${usd(lending)}. Defaulted principal ${usd(defaulted)}. Reserve cost ${usd(reserve)}.`}
           {leverage === null ? "" : ` Each reserve dollar backs about $${Math.round(leverage)} of lending.`}
         </p>
-        <dl aria-hidden="true" className="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2">
+        <dl aria-hidden="true" className="grid grid-cols-2 gap-x-6 gap-y-5">
           <div>
             <dt className="label text-muted">Total lending</dt>
-            <dd className="num mt-1 text-2xl font-medium sm:text-[1.7rem]">{usd(tLending)}</dd>
+            <dd className="num mt-1 text-lg font-medium sm:text-[1.7rem]">{usd(tLending)}</dd>
           </div>
           <div>
             <dt className="label text-muted">Defaulted principal</dt>
-            <dd className="num mt-1 text-2xl font-medium sm:text-[1.7rem]">{usd(tDefaulted)}</dd>
+            <dd className="num mt-1 text-lg font-medium sm:text-[1.7rem]">{usd(tDefaulted)}</dd>
           </div>
-          <div className="sm:col-span-2">
+          <div className="col-span-2">
             <dt className="label text-muted">Reserve cost to the county</dt>
             <dd className="num mt-1 text-4xl font-semibold text-accent sm:text-5xl">{usd(tReserve)}</dd>
           </div>
@@ -159,6 +171,7 @@ export function Calculator() {
             </>
           )}
         </p>
+        <p className="mt-4 font-mono text-[0.7rem] text-muted">Illustrative assumptions, not county figures.</p>
       </div>
     </div>
   );

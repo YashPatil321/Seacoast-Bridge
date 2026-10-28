@@ -134,11 +134,6 @@ export function SupportForm() {
 
   return (
     <form onSubmit={onSubmit} noValidate className="space-y-6" aria-describedby={ids("note")}>
-      <p id={ids("note")} className="font-mono text-xs leading-relaxed text-muted">
-        Fields marked * are required. Sending opens your email app with a note to me. Nothing is stored on this site, and
-        nothing is for sale.
-      </p>
-
       <div className="grid gap-6 sm:grid-cols-2">
         <div>
           <label htmlFor={ids("name")} className={labelCls}>
@@ -240,14 +235,18 @@ export function SupportForm() {
         Yash may contact me about this proposal.
       </Check>
 
-      <div className="flex flex-wrap items-center gap-4 pt-2">
-        <button type="submit" className="group inline-flex items-center gap-2 bg-amber px-6 py-3.5 font-mono text-[0.95rem] font-semibold text-[#0e2223] transition-transform hover:-translate-y-0.5">
+      <div className="space-y-4 border-t border-rule pt-6">
+        <button type="submit" className="group inline-flex w-full items-center justify-center gap-2 bg-amber sm:w-auto px-6 py-3.5 font-mono text-[0.95rem] font-semibold text-[#0e2223] transition-transform hover:-translate-y-0.5">
           Add my support
           <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">→</span>
         </button>
-        <a href="/privacy" className="prose-link font-mono text-xs">
-          Privacy note
-        </a>
+        <p id={ids("note")} className="max-w-xl text-[0.92rem] leading-relaxed text-muted">
+          * Required. Sending opens your email app with a note to me. Nothing is stored on this site, no cards are on
+          sale, and nothing here asks for payment.{" "}
+          <a href="/privacy" className="prose-link">
+            Privacy note
+          </a>
+        </p>
       </div>
     </form>
   );
