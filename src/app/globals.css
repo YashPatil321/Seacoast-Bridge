@@ -1,0 +1,411 @@
+@import "tailwindcss";
+
+/* ---------- Tokens ---------- */
+
+:root {
+  --teal: #0f3a3b;
+  --teal-deep: #0a2c2d;
+  --amber: #d98e2b;
+  --seaglass: #9fd0c8;
+
+  --bg: #f3f7f7;
+  --surface: #ffffff;
+  --ink: #0e2223;
+  --muted: #4b5f60;
+  --rule: #cddbda;
+  --accent-ink: #94540c; /* amber, darkened for AA text on the light body */
+  --tint: #e6efee;
+  --flow: #0f3a3b;
+
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0a1b1c;
+    --surface: #0f2526;
+    --ink: #e4eeed;
+    --muted: #a3bab8;
+    --rule: #22403f;
+    --accent-ink: #e8a54e;
+    --tint: #12302f;
+    --flow: #9fd0c8;
+  }
+}
+
+@theme inline {
+  --color-teal: var(--teal);
+  --color-teal-deep: var(--teal-deep);
+  --color-amber: var(--amber);
+  --color-seaglass: var(--seaglass);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-rule: var(--rule);
+  --color-accent: var(--accent-ink);
+  --color-tint: var(--tint);
+
+  --font-display: var(--font-familjen), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-newsreader), Georgia, "Times New Roman", serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* ---------- Base ---------- */
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  letter-spacing: -0.015em;
+  line-height: 1.12;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+::selection {
+  background: var(--amber);
+  color: #0e2223;
+}
+
+:focus-visible {
+  outline: 3px solid var(--amber);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Tide-table numerals */
+.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: "tnum" 1, "zero" 0;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.prose-link {
+  color: var(--accent-ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: text-decoration-thickness 0.15s;
+}
+.prose-link:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* Underline that draws in on hover, for nav and footer links */
+.draw-link {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1px;
+  transition: background-size 0.25s ease;
+  padding-bottom: 2px;
+}
+.draw-link:hover,
+.draw-link:focus-visible {
+  background-size: 100% 1px;
+}
+
+/* ---------- Range inputs (calculator) ---------- */
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 28px;
+  background: transparent;
+  cursor: pointer;
+  --fill: 50%;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px;
+  background: linear-gradient(to right, var(--amber) var(--fill), var(--rule) var(--fill));
+}
+input[type="range"]::-moz-range-track {
+  height: 4px;
+  background: var(--rule);
+}
+input[type="range"]::-moz-range-progress {
+  height: 4px;
+  background: var(--amber);
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  margin-top: -9px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 3px solid var(--amber);
+  transition: transform 0.15s;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 3px solid var(--amber);
+}
+input[type="range"]:active::-webkit-slider-thumb {
+  transform: scale(1.15);
+}
+input[type="range"]:focus-visible {
+  outline-offset: 2px;
+}
+
+/* ---------- Motion ---------- */
+
+/* Scroll reveal. Only hides content once JS has confirmed it can reveal it. */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.js [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Hero swell: three layered waves drifting at different speeds */
+@keyframes drift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.wave {
+  animation: drift linear infinite;
+  will-change: transform;
+}
+
+/* Pier light breathing */
+@keyframes glow {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.25);
+  }
+}
+.pier-light {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: glow 3.6s ease-in-out infinite;
+}
+
+/* Sun lowering behind the pier, plays once */
+@keyframes sunset {
+  from {
+    transform: translateY(-38px);
+    opacity: 0.4;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.sun {
+  animation: sunset 3.2s cubic-bezier(0.25, 0.6, 0.2, 1) both;
+}
+
+/* Money moving through the diagram */
+@keyframes flow {
+  to {
+    stroke-dashoffset: -28;
+  }
+}
+.flow-line {
+  stroke-dasharray: 6 8;
+  animation: flow 1.4s linear infinite;
+}
+.flow-line.slow {
+  animation-duration: 2.2s;
+}
+
+/* Hero entrance */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.rise {
+  animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: var(--rise-delay, 0ms);
+}
+
+/* Countdown seconds tick */
+@keyframes tick {
+  from {
+    opacity: 0.35;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.tick {
+  animation: tick 0.5s ease-out;
+}
+
+/* Bars that fill once revealed */
+.fill-bar {
+  transform-origin: left center;
+  transform: scaleX(var(--to, 1));
+  transition: transform 1.4s cubic-bezier(0.2, 0.7, 0.2, 1) 0.2s;
+}
+.js [data-reveal]:not(.is-in) .fill-bar {
+  transform: scaleX(var(--from, 0));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.001ms !important;
+    transition-delay: 0ms !important;
+  }
+  .wave,
+  .flow-line,
+  .pier-light {
+    animation: none !important;
+  }
+  .js [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- Print (the brief) ---------- */
+
+@page {
+  size: letter;
+  margin: 0.7in;
+}
+
+@media print {
+  :root {
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --ink: #000000;
+    --muted: #333333;
+    --rule: #999999;
+    --accent-ink: #000000;
+    --tint: #f2f2f2;
+    --flow: #0f3a3b;
+  }
+  html,
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    font-size: 10.5pt;
+    line-height: 1.45;
+  }
+  .no-print,
+  header[role="banner"],
+  footer[role="contentinfo"],
+  .skip-link {
+    display: none !important;
+  }
+  .js [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+  a {
+    color: inherit !important;
+  }
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+  tr,
+  figure,
+  blockquote,
+  .avoid-break {
+    break-inside: avoid;
+  }
+  thead {
+    display: table-header-group;
+  }
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .print-url::after {
+    content: " (" attr(href) ")";
+    font-size: 8pt;
+    word-break: break-all;
+  }
+}
+
+/* Thank-you checkmark draws itself */
+@keyframes draw {
+  from {
+    stroke-dashoffset: 40;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.check-draw {
+  stroke-dasharray: 40;
+  animation: draw 0.6s 0.25s ease-out both;
+}
+
+/* 7 of 10 dots fill one after another */
+.dot-on {
+  background: var(--amber);
+  transition: transform 0.45s cubic-bezier(0.3, 1.5, 0.5, 1);
+  transition-delay: calc(var(--i, 0) * 90ms + 250ms);
+}
+.js [data-reveal]:not(.is-in) .dot-on {
+  transform: scale(0);
+}
